@@ -1,26 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager, UserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 import uuid
 
-# Create your models here.
-
-class User(AbstractUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username = None
-    email = models.EmailField(verbose_name='Электронная почта', max_length=254, null=False, blank=False, unique=True)
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
-    password = models.CharField(verbose_name='Пароль', max_length=254, null=False, blank=False)
-    delivery_address = models.CharField(verbose_name='Адрес доставки', max_length=254, blank=True)
-    phone_number = models.CharField(verbose_name='Номер телефона', max_length=254, blank=True)
-    objects = UserManager()
-
-    class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
-
-    def __str__(self):
-        return self.email
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -49,3 +30,24 @@ class UserManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True.')
 
         return self._create_user(email, password, **extra_fields)
+
+
+# Create your models here.
+
+class UserModel(AbstractUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    username = None
+    email = models.EmailField(verbose_name='Электронная почта', max_length=254, null=False, blank=False, unique=True)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+    password = models.CharField(verbose_name='Пароль', max_length=254, null=False, blank=False)
+    delivery_address = models.CharField(verbose_name='Адрес доставки', max_length=254, blank=True)
+    phone_number = models.CharField(verbose_name='Номер телефона', max_length=254, blank=True)
+    objects = UserManager()
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+
+    def __str__(self):
+        return self.email
